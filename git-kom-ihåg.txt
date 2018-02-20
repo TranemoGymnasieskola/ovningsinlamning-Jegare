@@ -1,0 +1,7 @@
+Git kom ihåg
+
+cd BreakOut
+git status
+git add .
+git commit -m "Vad är nytt"
+git push

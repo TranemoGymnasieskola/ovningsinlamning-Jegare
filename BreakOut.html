@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<canvas id="myCanvas" width="800" height="680"></canvas>
+<canvas id="myCanvas" width="790" height="680"></canvas>
 
 <script>
     var canvas = document.getElementById("myCanvas");
@@ -25,7 +25,7 @@
     var leftPressed = false;
     var brickRowCount = 9;
     var brickColumnCount = 4;
-    var brickWidth = 75;
+    var brickWidth = 70;
     var brickHeight = 20;
     var brickPadding = 10;
     var brickOffsetTop = 30;
@@ -89,6 +89,13 @@
         ctx.fill();
         ctx.closePath();
     }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBricks();
+        drawBall();
+
+
     function drawPaddle() {
         ctx.beginPath();
         ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
@@ -123,19 +130,18 @@
         ctx.fillStyle = "#0095DD";
         ctx.fillText("Lives: "+lives, canvas.width-65, 20);
     }
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawBricks();
-        drawBall();
+    
         drawPaddle();
         drawScore();
         drawLives();
         collisionDetection();
         if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
             dx = -dx;
+            color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
         }
         if(y + dy < ballRadius) {
             dy = -dy;
+            color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
         }
         else if(y + dy > canvas.height-ballRadius) {
             if(x > paddleX && x < paddleX + paddleWidth) {
@@ -166,6 +172,7 @@
         y += dy;
         requestAnimationFrame(draw);
     }
+    
     draw();
 </script>
 

@@ -11,31 +11,31 @@
 <canvas id="myCanvas" width="790" height="680"></canvas>
 
 <script>
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
-    var ballRadius = 10;
-    var x = canvas.width/2;
-    var y = canvas.height-30;
-    var dx = 5;
-    var dy = -5;
-    var paddleHeight = 10;
-    var paddleWidth = 75;
-    var paddleX = (canvas.width-paddleWidth)/2;
-    var rightPressed = false;
-    var leftPressed = false;
-    var brickRowCount = 9;
-    var brickColumnCount = 4;
-    var brickWidth = 70;
-    var brickHeight = 20;
-    var brickPadding = 10;
-    var brickOffsetTop = 30;
-    var brickOffsetLeft = 30;
-    var score = 0;
-    var lives = 3;
-    var bricks = [];
-    for(c=0; c<brickColumnCount; c++) {
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+    const ballRadius = 10;
+    const x = canvas.width/2;
+    const y = canvas.height-30;
+    const dx = 5;
+    const dy = -5;
+    const paddleHeight = 10;
+    const paddleWidth = 75;
+    let paddleX = (canvas.width-paddleWidth)/2;
+    let rightPressed = false;
+    let leftPressed = false;
+    const brickRowCount = 9;
+    const brickColumnCount = 4;
+    const brickWidth = 70;
+    const brickHeight = 20;
+    const brickPadding = 10;
+    const brickOffsetTop = 30;
+    const brickOffsetLeft = 30;
+    const score = 0;
+    const lives = 3;
+    const bricks = [];
+    for(let c=0; c<brickColumnCount; c++) {
         bricks[c] = [];
-        for(r=0; r<brickRowCount; r++) {
+        for(let r=0; r<brickRowCount; r++) {
             bricks[c][r] = { x: 0, y: 0, status: 1 };
         }
     }
@@ -57,20 +57,30 @@
         else if(e.keyCode == 37) {
             leftPressed = false;
         }
+        /**
+        *Arrow keys kontroller
+        *
+        *Låter spelaren använda arrow key tangenterna och kollar efter om du antingen trycker på vänster eller höger.
+        */
     }
     function mouseMoveHandler(e) {
-        var relativeX = e.clientX - canvas.offsetLeft;
+        let relativeX = e.clientX - canvas.offsetLeft;
         if(relativeX > 0 && relativeX < canvas.width) {
             paddleX = relativeX - paddleWidth/2;
         }
+        /**Mouse pad kontroller
+        *
+        *Låter spelaren använda mousepad också för att kontrollera spelet.
+        *Endast inom spel banan kan mousepad användas då musen är innanför spelbanan.
+        */
     }
     function collisionDetection() {
-        for(c=0; c<brickColumnCount; c++) {
-            for(r=0; r<brickRowCount; r++) {
-                var b = bricks[c][r];
+        for(let c=0; c<brickColumnCount; c++) {
+            for(let r=0; r<brickRowCount; r++) {
+                let b = bricks[c][r];
                 if(b.status == 1) {
                     if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
-                        dy = -dy;
+                       const dy = -dy;
                         b.status = 0;
                         score++;
                         if(score == brickRowCount*brickColumnCount) {
@@ -82,6 +92,13 @@
             }
         }
     }
+    /**
+    *Träff registrering
+    *
+    *Själva funktionen för att koden förstår att när bollen träffar antingen väggarna eller bricks ska studsa tillbaka.
+    *Även en vinn-notifikation om bollen har träffat alla bricks som finns och ger spelaren möjligheten till att ladda om spelsidan.
+    */
+
     function drawBall() {
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -89,12 +106,6 @@
         ctx.fill();
         ctx.closePath();
     }
-
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawBricks();
-        drawBall();
-
 
     function drawPaddle() {
         ctx.beginPath();
@@ -104,11 +115,11 @@
         ctx.closePath();
     }
     function drawBricks() {
-        for(c=0; c<brickColumnCount; c++) {
-            for(r=0; r<brickRowCount; r++) {
+        for(let c=0; c<brickColumnCount; c++) {
+            for(let r=0; r<brickRowCount; r++) {
                 if(bricks[c][r].status == 1) {
-                    var brickX = (r*(brickWidth+brickPadding))+brickOffsetLeft;
-                    var brickY = (c*(brickHeight+brickPadding))+brickOffsetTop;
+                    let brickX = (r*(brickWidth+brickPadding))+brickOffsetLeft;
+                    let brickY = (c*(brickHeight+brickPadding))+brickOffsetTop;
                     bricks[c][r].x = brickX;
                     bricks[c][r].y = brickY;
                     ctx.beginPath();
@@ -131,16 +142,21 @@
         ctx.fillText("Lives: "+lives, canvas.width-65, 20);
     }
     
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBricks();
+        drawBall();
         drawPaddle();
         drawScore();
         drawLives();
         collisionDetection();
+
         if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
-            dx = -dx;
+          const  dx = -dx;
             color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
         }
         if(y + dy < ballRadius) {
-            dy = -dy;
+           const dy = -dy;
             color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
         }
         else if(y + dy > canvas.height-ballRadius) {
@@ -172,7 +188,7 @@
         y += dy;
         requestAnimationFrame(draw);
     }
-    
+
     draw();
 </script>
 

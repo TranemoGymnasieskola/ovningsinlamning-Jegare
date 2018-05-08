@@ -30,9 +30,9 @@
     const brickPadding = 10;
     const brickOffsetTop = 30;
     const brickOffsetLeft = 30;
-    const score = 0;
-    const lives = 3;
-    const bricks = [];
+    let score = 0;
+    let lives = 3;
+    let bricks = [];
     for(let c=0; c<brickColumnCount; c++) {
         bricks[c] = [];
         for(let r=0; r<brickRowCount; r++) {
@@ -68,10 +68,10 @@
         if(relativeX > 0 && relativeX < canvas.width) {
             paddleX = relativeX - paddleWidth/2;
         }
-        /**Mouse pad kontroller
-        *
+        /**
+        *Mouse pad kontroller
         *Låter spelaren använda mousepad också för att kontrollera spelet.
-        *Endast inom spel banan kan mousepad användas då musen är innanför spelbanan.
+        *Endast inom spel banan kan mousepad användas då musen är innanför spelbanan och enbart på själva marken av spelbanan.
         */
     }
     function collisionDetection() {
@@ -106,6 +106,12 @@
         ctx.fill();
         ctx.closePath();
     }
+        /**
+        *Bollen
+        *Bollen som studsar runt på skärmen.
+        *Dess väg anges slumpmässigt från start och vid träff av vägg eller "paddle".
+        *Anges av dx och dy hur snabbt den rör på sig och faktiskt ska röra sig. 
+        */ 
 
     function drawPaddle() {
         ctx.beginPath();
@@ -114,6 +120,13 @@
         ctx.fill();
         ctx.closePath();
     }
+        /**
+        *Brickan som styrs av användaren
+        *När bollen studsar tillbaka träffar den antingen väggarna eller "paddle" för att kunna fortstäta spelet
+        *
+        */
+
+
     function drawBricks() {
         for(let c=0; c<brickColumnCount; c++) {
             for(let r=0; r<brickRowCount; r++) {
@@ -131,16 +144,35 @@
             }
         }
     }
+    /**
+    *Bricks för bollen att träffa.
+    *Anger blocken längst upp av spelytan, vilket kan bli "träffade" av bollen.
+    *Blocken placeras även inte precis intill varandra och börjar inte ritas precis på kanten av spelytan.
+    */
+
     function drawScore() {
         ctx.font = "16px Arial";
         ctx.fillStyle = "#0095DD";
         ctx.fillText("Score: "+score, 8, 20);
     }
+    /**
+    *Poäng
+    *Antalet poäng givet efter varje träff av en brick av bollen.
+    *Startar på 0 och återställs på 0 efter förlust/vinst.
+    *De nummer (8, 20) anger placeringen av texten.
+    *Har en förbindelse med Collision detection funktionen när poäng ska givas.
+    */
+
     function drawLives() {
         ctx.font = "16px Arial";
         ctx.fillStyle = "#0095DD";
         ctx.fillText("Lives: "+lives, canvas.width-65, 20);
     }
+    /**
+    *Liv 
+    *Antalet "liv" spelaren får innan spelet avslutas.
+    *De nummer (65, 20) anger placeringen av texten.
+    */
     
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -155,7 +187,7 @@
           const  dx = -dx;
             color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
         }
-        if(y + dy < ballRadius) {
+        if(y + dy < ballRadius) 
            const dy = -dy;
             color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
         }
@@ -188,6 +220,10 @@
         y += dy;
         requestAnimationFrame(draw);
     }
+    /**
+    *Samlingen av alla funktioner 
+    *Visar funktionerna för tangent kontrollerna, om man förlorar alla liv visas en notifikation för förlust med en knapp för att ladda om hemsidan, och om spelet ska fortsätta efter man har förlorat ett liv. Även en färg ändring av bollen vid träff (Funkar ej)
+    */
 
     draw();
 </script>

@@ -16,8 +16,13 @@
     const ballRadius = 10;
     let x = canvas.width/2;
     let y = canvas.height-30;
+<<<<<<< HEAD
     let dx = 7;
     let dy = -7;
+=======
+    let dx = 5;
+    let dy = -5;
+>>>>>>> f8d44d932e17b98e0bbf15ff30026413d745474d
     const paddleHeight = 10;
     const paddleWidth = 75;
     let paddleX = (canvas.width-paddleWidth)/2;
@@ -187,7 +192,11 @@
             dx = -dx;
             color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
         }
+<<<<<<< HEAD
         if(y + dy < ballRadius) {
+=======
+        if (y + dy < ballRadius) { 
+>>>>>>> f8d44d932e17b98e0bbf15ff30026413d745474d
             dy = -dy;
             color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
         }

@@ -16,13 +16,8 @@
     const ballRadius = 10;
     let x = canvas.width/2;
     let y = canvas.height-30;
-<<<<<<< HEAD
-    let dx = 7;
-    let dy = -7;
-=======
-    let dx = 5;
-    let dy = -5;
->>>>>>> f8d44d932e17b98e0bbf15ff30026413d745474d
+    let dx = 15;
+    let dy = -15;
     const paddleHeight = 10;
     const paddleWidth = 75;
     let paddleX = (canvas.width-paddleWidth)/2;
@@ -36,7 +31,10 @@
     const brickOffsetTop = 30;
     const brickOffsetLeft = 30;
     let score = 0;
-    let lives = 3;
+    let TotalScore = 0;
+    let lives = 99;
+    let level = 1;
+    let color = "#17202A"
     let bricks = [];
     for(let c=0; c<brickColumnCount; c++) {
         bricks[c] = [];
@@ -80,17 +78,32 @@
         */
     }
     function collisionDetection() {
-        for (let c=0; c<brickColumnCount; c++) {
-            for (let r=0; r<brickRowCount; r++) {
+        for(let c=0; c<brickColumnCount; c++) {
+            for(let r=0; r<brickRowCount; r++) {
                 let b = bricks[c][r];
                 if(b.status == 1) {
                     if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
                         dy = -dy;
                         b.status = 0;
+                        TotalScore++;
                         score++;
                         if(score == brickRowCount*brickColumnCount) {
-                            alert("Wasn't that hard, innit?!");
-                            document.location.reload();
+                            if(b.status == 0) 
+                                Level++;
+                                
+
+
+
+
+                            
+                            // document.location.reload();
+                            // Räkna level
+                            // Skriva ut level
+                            // Ge alla brickor status 1 igen
+                            // Öka farten på bollen
+                            // Nollställa score
+                            // Total score
+                            // Bollen till utgångspunkt
                         }
                     }
                 }
@@ -107,7 +120,7 @@
     function drawBall() {
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-        ctx.fillStyle = "#0095DD";
+        ctx.fillStyle = "#17202A";
         ctx.fill();
         ctx.closePath();
     }
@@ -121,7 +134,7 @@
     function drawPaddle() {
         ctx.beginPath();
         ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-        ctx.fillStyle = "#0095DD";
+        ctx.fillStyle = "#17202A";
         ctx.fill();
         ctx.closePath();
     }
@@ -133,16 +146,16 @@
 
 
     function drawBricks() {
-        for (let c=0; c<brickColumnCount; c++) {
-            for (let r=0; r<brickRowCount; r++) {
-                if (bricks[c][r].status == 1) {
+        for(let c=0; c<brickColumnCount; c++) {
+            for(let r=0; r<brickRowCount; r++) {
+                if(bricks[c][r].status == 1) {
                     let brickX = (r*(brickWidth+brickPadding))+brickOffsetLeft;
                     let brickY = (c*(brickHeight+brickPadding))+brickOffsetTop;
                     bricks[c][r].x = brickX;
                     bricks[c][r].y = brickY;
                     ctx.beginPath();
                     ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                    ctx.fillStyle = "#0095DD";
+                    ctx.fillStyle = color;
                     ctx.fill();
                     ctx.closePath();
                 }
@@ -157,7 +170,7 @@
 
     function drawScore() {
         ctx.font = "16px Arial";
-        ctx.fillStyle = "#0095DD";
+        ctx.fillStyle = "#17202A";
         ctx.fillText("Score: "+score, 8, 20);
     }
     /**
@@ -168,9 +181,15 @@
     *Har en förbindelse med Collision detection funktionen när poäng ska givas.
     */
 
+    function drawTotalScore() {
+        ctx. font = "16px Arial";
+        ctx.fillstyle = "#17202A";
+        ctx.fillText("TotalScore: "+TotalScore, 100, 20)
+    }
+
     function drawLives() {
         ctx.font = "16px Arial";
-        ctx.fillStyle = "#0095DD";
+        ctx.fillStyle = "#17202A";
         ctx.fillText("Lives: "+lives, canvas.width-65, 20);
     }
     /**
@@ -178,29 +197,33 @@
     *Antalet "liv" spelaren får innan spelet avslutas.
     *De nummer (65, 20) anger placeringen av texten.
     */
+
+    function drawLevel() {
+        ctx.font = "16px Arial";
+        ctx.fillstyle = "#17202A";
+        ctx.fillText("Level: " +level, 360, 20);
+    }
     
     function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height); 
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawBricks();
         drawBall();
         drawPaddle();
         drawScore();
+        drawTotalScore();
         drawLives();
+        drawLevel();
         collisionDetection();
 
         if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
             dx = -dx;
             color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
         }
-<<<<<<< HEAD
         if(y + dy < ballRadius) {
-=======
-        if (y + dy < ballRadius) { 
->>>>>>> f8d44d932e17b98e0bbf15ff30026413d745474d
             dy = -dy;
-            color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
+            color = "#" + ((1 << 24) * Math.random() | 0).toString(16) 
         }
-        else if(y + dy > canvas.height-ballRadius) {
+        else if (y + dy > canvas.height-ballRadius) {
             if(x > paddleX && x < paddleX + paddleWidth) {
                 dy = -dy;
             }
@@ -213,8 +236,8 @@
                 else {
                     x = canvas.width/2;
                     y = canvas.height-30;
-                    dx = 7;
-                    dy = -7;
+                    dx = 15;
+                    dy = -15;
                     paddleX = (canvas.width-paddleWidth)/2;
                 }
             }
@@ -231,7 +254,7 @@
     }
     /**
     *Samlingen av alla funktioner 
-    *Visar funktionerna för tangent kontrollerna, om man förlorar alla liv visas en notifikation för förlust med en knapp för att ladda om hemsidan, och om spelet ska fortsätta efter man har förlorat ett liv. Även en färg ändring av bollen vid träff (Funkar ej)
+    *Visar funktionerna för tangent kontrollerna, om man förlorar alla liv visas en notifikation för förlust med en knapp för att ladda om hemsidan, och om spelet ska fortsätta efter man har förlorat ett liv. Även en färg ändring av bollen vid träff.
     */
 
     draw();
@@ -239,3 +262,5 @@
 
 </body>
 </html>
+
+    

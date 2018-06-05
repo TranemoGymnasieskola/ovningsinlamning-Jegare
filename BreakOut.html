@@ -16,8 +16,10 @@
     const ballRadius = 10;
     let x = canvas.width/2;
     let y = canvas.height-30;
-    let dx = 10;
-    let dy = -10;
+    let gameSpeed = 10;
+    let Level = 1;
+    let dx = (1 + Level) * 5;
+    let dy = -(1 + Level) * 5;
     const paddleHeight = 10;
     const paddleWidth = 75;
     let paddleX = (canvas.width-paddleWidth)/2;
@@ -33,7 +35,6 @@
     let Score = 0;
     let TotalScore = 0;
     let Lives = 99;
-    let Level = 1;
     let Color = "#17202A"
     let Bricks = [];
 
@@ -88,13 +89,13 @@
                         b.status = 0;
                         TotalScore++;
                         Score++;
-                                if(Score == brickRowCount*brickColumnCount) {        
-                                   dx = 15;
-                                   dy = -15; 
+                                if (Score == brickRowCount*brickColumnCount) {        
+                                   dx = (2 + Level) * 5;
+                                   dy = -(2 + Level) * 5; 
                                    TotalScore++;
                                    Level++;
                                    Score = 0;
-                                   Lives = 50;
+                                   Lives = 90;
                                    x = canvas.width/2;
                                    y = canvas.height-30;
                                    paddleX = (canvas.width-paddleWidth)/2;
@@ -102,18 +103,16 @@
                                              Bricks[c] = [];
                                              for (let r=0; r<brickRowCount; r++) {
                                                  Bricks[c][r] = { x: 0, y: 0, status: 1 };
-                                                 }
+                                                 
+                                                 
                                              }
-                                         
+                                             
+                                         }
 
+                                    }
+                                    
 
-
-                        
-
-                        
-
-                        
-                        
+                                
                     
                             // document.location.reload();
                             // Räkna level Y
@@ -123,19 +122,19 @@
                             // Nollställa score Y
                             // Total score Y
                             // Bollen till utgångspunkt Y
-                            // Fler än bara "2 nivåer"
-                            // RGB på bollen samt paddle
+                            // Vinna spelet N
+                            // RGB på bollen samt paddle N
                         }
                     }
                 }
             }
         }
-    }
+    
     /**
     *Träff registrering
     *
     *Själva funktionen för att koden förstår att när bollen träffar antingen väggarna eller bricks ska studsa tillbaka.
-    *Om bollen har träffat alla bricks som finns och går in på nästa nivå.
+    *Om bollen har träffat alla bricks som finns och går in på nästa nivå. Alla block råterställs, nollställning på poäng men inte totalpoängen och antalet liv ändras
     */
 
     function drawBall() {
@@ -257,12 +256,13 @@
                 else {
                     x = canvas.width/2;
                     y = canvas.height-30;
-                    dx = 10;
-                    dy = -10;
+                    dx = (1 + Level) * 5;
+                    dy = -(1 + Level) * 5;
                     paddleX = (canvas.width-paddleWidth)/2;
                 }
             }
         }
+
         if (rightPressed && paddleX < canvas.width-paddleWidth) {
             paddleX += 15;
         }
@@ -271,7 +271,15 @@
         }
         x += dx;
         y += dy;
-        requestAnimationFrame(draw);
+        if ( TotalScore > 73 ) {
+            // Vinst
+            ctx.textAlign = "center";
+            ctx.font="30px Arial";
+            ctx.fillText("Du har vunnit! Poäng: " + TotalScore, canvas.width/2, canvas.height/2 );
+
+        } else {
+            requestAnimationFrame(draw);
+        }
     }
     /**
     *Samlingen av alla funktioner 
